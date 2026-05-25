@@ -1,0 +1,190 @@
+# ============================================================
+# .NET / Visual Studio
+# ============================================================
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+temp-build/
+
+# Build Folders
+bin/
+obj/
+
+# Visual Studio cache/options directory
+.vs/
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# ReSharper
+.idea/
+*.resharper
+*.resharper.user
+_ReSharper*/
+*.sln.iml
+
+# Local History for Visual Studio Code
+.history/
+
+# Rider
+.idea/
+*.sln.iml
+
+# ============================================================
+# Environment & Configuration (Sensitive Data)
+# ============================================================
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.production
+
+# DO NOT commit appsettings with secrets
+FodunReservas.Web/appsettings.json
+FodunReservas.Web/appsettings.Development.json
+!FodunReservas.Web/appsettings.example.json
+!FodunReservas.Web/appsettings.Development.example.json
+
+# ============================================================
+# NuGet
+# ============================================================
+
+*.nupkg
+*.snupkg
+.nuget/
+project.assets.json
+project.lock.json
+packages/
+
+# ============================================================
+# Entity Framework Core
+# ============================================================
+
+*.db
+*.db-shm
+*.db-wal
+migrations/
+*.sqlite
+*.sqlite3
+
+# ============================================================
+# Application Specific
+# ============================================================
+
+# Email pickup directory (desarrollo)
+FodunReservas.Web/App_Data/Emails/
+
+# User uploads/files
+FodunReservas.Web/App_Data/Uploads/
+
+# Database backups
+*.bak
+*.sql.bak
+
+# ============================================================
+# OS
+# ============================================================
+
+# Windows
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+.directory
+
+# ============================================================
+# IDE / Editor
+# ============================================================
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# Visual Studio
+*.user
+*.suo
+*.sln.docstates
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# ============================================================
+# Temporary Files
+# ============================================================
+
+*.tmp
+*.temp
+*.bak
+*~
+*.swp
+*.swo
+*.lock
+
+# ============================================================
+# Build Artifacts
+# ============================================================
+
+dist/
+build/
+publish/
+PublishProfiles/
+
+# ============================================================
+# Testing
+# ============================================================
+
+# Test Results
+TestResults/
+coverage/
+*.trx
+
+# ============================================================
+# Documentation
+# ============================================================
+
+# Exclude temporary docs
+~*.docx
+~*.doc
+.~*
+
+# ============================================================
+# Node (if any frontend build tools)
+# ============================================================
+
+node_modules/
+npm-debug.log
+yarn-error.log
+dist/

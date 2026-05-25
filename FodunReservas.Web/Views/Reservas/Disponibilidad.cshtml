@@ -1,0 +1,163 @@
+@model DisponibilidadViewModel
+@{
+    ViewData["Title"] = "Disponibilidad";
+}
+
+<div class="py-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <div>
+            <h1 class="display-6 mb-1">Consulta de disponibilidad</h1>
+            <p class="text-muted mb-0">Esta vista consume `sp_HabitacionesDisponiblesPorFechaYPersonas` y filtra por sede, fechas y numero de personas.</p>
+        </div>
+        <a class="btn btn-outline-secondary" asp-action="Index">Ver sedes</a>
+    </div>
+
+    @if (TempData["ReservaError"] is string reservaError)
+    {
+        <div class="alert alert-warning">@reservaError</div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" asp-action="Disponibilidad" class="row g-3">
+                <div class="col-md-4">
+                    <label asp-for="SedeId" class="form-label">Sede</label>
+                    <select asp-for="SedeId" asp-items="Model.Sedes" class="form-select">
+                        <option value="">Selecciona una sede</option>
+                    </select>
+                    <span asp-validation-for="SedeId" class="text-danger small"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="FechaEntrada" class="form-label">Fecha entrada</label>
+                    <input asp-for="FechaEntrada" class="form-control" type="date" />
+                    <span asp-validation-for="FechaEntrada" class="text-danger small"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="FechaSalida" class="form-label">Fecha salida</label>
+                    <input asp-for="FechaSalida" class="form-control" type="date" />
+                    <span asp-validation-for="FechaSalida" class="text-danger small"></span>
+                </div>
+                <div class="col-md-2">
+                    <label asp-for="NroPersonas" class="form-label">Personas</label>
+                    <input asp-for="NroPersonas" class="form-control" type="number" min="1" />
+                    <span asp-validation-for="NroPersonas" class="text-danger small"></span>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Buscar alojamientos</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.HasSearched)
+    {
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h4 mb-0">Resultados</h2>
+            <span class="text-muted">@Model.Resultados.Count alojamiento(s) disponible(s)</span>
+        </div>
+
+        @if (!Model.Resultados.Any())
+        {
+            <div class="alert alert-info mb-0">
+                No hay alojamientos disponibles para los criterios indicados.
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+                @foreach (var item in Model.Resultados)
+                {
+                    <div class="col-lg-6">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                                    <div>
+                                        <h3 class="h5 mb-1">Alojamiento @item.NumeroAlojamiento</h3>
+                                        <div class="text-muted">@item.TipoAlojamiento</div>
+                                    </div>
+                                    <span class="badge bg-success">Disponible</span>
+                                </div>
+
+                                @if (!string.IsNullOrWhiteSpace(item.Descripcion))
+                                {
+                                    <p>@item.Descripcion</p>
+                                }
+
+                                <dl class="row mb-3">
+                                    <dt class="col-sm-6">Capacidad maxima</dt>
+                                    <dd class="col-sm-6">@item.CapacidadMaxima persona(s)</dd>
+
+                                    <dt class="col-sm-6">Numero de habitaciones</dt>
+                                    <dd class="col-sm-6">@item.NumeroHabitaciones</dd>
+                                </dl>
+
+                                <p class="small text-muted mb-3">
+                                    Comodidades:
+                                    @(string.Join(", ", new[]
+                                    {
+                                        item.TieneBano ? "Bano" : null,
+                                        item.TieneCocineta ? "Cocineta" : null,
+                                        item.TieneTelevision ? "Television" : null,
+                                        item.TieneNevera ? "Nevera" : null,
+                                        item.TieneTerraza ? "Terraza" : null,
+                                        item.TieneSalaEstar ? "Sala de estar" : null,
+                                        item.TieneParqueadero ? "Parqueadero" : null
+                                    }.Where(x => x is not null)))
+                                </p>
+
+                                <a class="btn btn-primary"
+                                   asp-action="Confirmar"
+                                   asp-route-sedeId="@Model.SedeId"
+                                   asp-route-alojamientoId="@item.AlojamientoId"
+                                   asp-route-fechaEntrada="@Model.FechaEntrada?.ToString("yyyy-MM-dd")"
+                                   asp-route-fechaSalida="@Model.FechaSalida?.ToString("yyyy-MM-dd")"
+                                   asp-route-nroPersonas="@Model.NroPersonas">
+                                    Confirmar reserva
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Restaurar valores guardados de localStorage
+        const fechaEntradaInput = document.querySelector('[name="FechaEntrada"]');
+        const fechaSalidaInput = document.querySelector('[name="FechaSalida"]');
+        const nroPersonasInput = document.querySelector('[name="NroPersonas"]');
+        
+        const savedFechaEntrada = localStorage.getItem('reserva_fechaEntrada');
+        const savedFechaSalida = localStorage.getItem('reserva_fechaSalida');
+        const savedNroPersonas = localStorage.getItem('reserva_nroPersonas');
+        
+        if (savedFechaEntrada && !fechaEntradaInput.value) fechaEntradaInput.value = savedFechaEntrada;
+        if (savedFechaSalida && !fechaSalidaInput.value) fechaSalidaInput.value = savedFechaSalida;
+        if (savedNroPersonas && !nroPersonasInput.value) nroPersonasInput.value = savedNroPersonas;
+    });
+    
+    // Guardar valores cada vez que cambian
+    document.querySelector('[name="FechaEntrada"]')?.addEventListener('change', e => {
+        localStorage.setItem('reserva_fechaEntrada', e.target.value);
+    });
+    
+    document.querySelector('[name="FechaSalida"]')?.addEventListener('change', e => {
+        localStorage.setItem('reserva_fechaSalida', e.target.value);
+    });
+    
+    document.querySelector('[name="NroPersonas"]')?.addEventListener('change', e => {
+        localStorage.setItem('reserva_nroPersonas', e.target.value);
+    });
+    </script>
+}

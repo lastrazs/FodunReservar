@@ -1,0 +1,63 @@
+@model TemporadaFormViewModel
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Nueva temporada" : "Editar temporada";
+}
+
+<div class="py-4">
+    <h1 class="display-6 mb-4">@ViewData["Title"]</h1>
+
+    <form method="post" class="row g-3">
+        @Html.AntiForgeryToken()
+        <input asp-for="Id" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="col-md-6">
+            <label asp-for="Nombre" class="form-label"></label>
+            <input asp-for="Nombre" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Prioridad" class="form-label"></label>
+            <input asp-for="Prioridad" class="form-control" type="number" min="1" />
+        </div>
+        <div class="col-12">
+            <label asp-for="Descripcion" class="form-label"></label>
+            <textarea asp-for="Descripcion" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="MesInicio" class="form-label"></label>
+            <input asp-for="MesInicio" class="form-control" type="number" min="1" max="12" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="DiaInicio" class="form-label"></label>
+            <input asp-for="DiaInicio" class="form-control" type="number" min="1" max="31" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="MesFin" class="form-label"></label>
+            <input asp-for="MesFin" class="form-control" type="number" min="1" max="12" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="DiaFin" class="form-label"></label>
+            <input asp-for="DiaFin" class="form-control" type="number" min="1" max="31" />
+        </div>
+        <div class="col-md-6">
+            <div class="form-check mt-4">
+                <input asp-for="EsEspecial" class="form-check-input" />
+                <label asp-for="EsEspecial" class="form-check-label"></label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-check mt-4">
+                <input asp-for="Activa" class="form-check-input" />
+                <label asp-for="Activa" class="form-check-label"></label>
+            </div>
+        </div>
+        <div class="col-12 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a class="btn btn-outline-secondary" asp-action="Temporadas">Volver</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

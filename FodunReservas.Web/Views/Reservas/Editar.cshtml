@@ -1,0 +1,132 @@
+@model EditarReservaViewModel
+@{
+    ViewData["Title"] = "Editar reserva";
+}
+
+<div class="py-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <div>
+            <h1 class="display-6 mb-1">Editar reserva #@Model.ReservaId</h1>
+            <p class="text-muted mb-0">Puedes actualizar fechas, numero de personas y observaciones. El total se recalcula con los procedimientos almacenados.</p>
+        </div>
+        <a class="btn btn-outline-secondary" asp-action="MisReservas">Volver a mis reservas</a>
+    </div>
+
+    <form asp-action="Editar" method="post" class="row g-4">
+        @Html.AntiForgeryToken()
+        <input asp-for="ReservaId" type="hidden" />
+        <input asp-for="SedeId" type="hidden" />
+        <input asp-for="AlojamientoId" type="hidden" />
+
+        <div class="col-lg-7">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Datos de la reserva</h2>
+
+                    <dl class="row">
+                        <dt class="col-sm-4">Sede</dt>
+                        <dd class="col-sm-8">@Model.SedeNombre - @Model.SedeUbicacion</dd>
+
+                        <dt class="col-sm-4">Alojamiento</dt>
+                        <dd class="col-sm-8">@Model.NumeroAlojamiento (@Model.TipoAlojamiento)</dd>
+
+                        <dt class="col-sm-4">Descripcion</dt>
+                        <dd class="col-sm-8">@(!string.IsNullOrWhiteSpace(Model.Descripcion) ? Model.Descripcion : "Sin descripcion")</dd>
+
+                        <dt class="col-sm-4">Capacidad maxima</dt>
+                        <dd class="col-sm-8">@Model.CapacidadMaxima persona(s)</dd>
+                    </dl>
+
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label asp-for="FechaEntrada" class="form-label">Fecha entrada</label>
+                            <input asp-for="FechaEntrada" class="form-control" type="date" />
+                            <span asp-validation-for="FechaEntrada" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="FechaSalida" class="form-label">Fecha salida</label>
+                            <input asp-for="FechaSalida" class="form-control" type="date" />
+                            <span asp-validation-for="FechaSalida" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="NroPersonas" class="form-label">Personas</label>
+                            <input asp-for="NroPersonas" class="form-control" type="number" min="1" />
+                            <span asp-validation-for="NroPersonas" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="NroAcompanantes" class="form-label">Acompanantes</label>
+                            <input asp-for="NroAcompanantes" class="form-control" type="number" min="0" max="10" />
+                            <span asp-validation-for="NroAcompanantes" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <div class="form-check mb-2">
+                                <input asp-for="RequiereLavanderia" class="form-check-input" />
+                                <label asp-for="RequiereLavanderia" class="form-check-label">Lavanderia</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Observaciones" class="form-label">Observaciones</label>
+                            <textarea asp-for="Observaciones" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="Observaciones" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Resumen recalculado</h2>
+
+                    <dl class="row mb-0">
+                        <dt class="col-sm-7">Habitaciones</dt>
+                        <dd class="col-sm-5">@Model.NroHabitaciones</dd>
+
+                        <dt class="col-sm-7">Noches</dt>
+                        <dd class="col-sm-5">@Model.NumeroNoches</dd>
+
+                        <dt class="col-sm-7">Temporada</dt>
+                        <dd class="col-sm-5">@Model.Temporada</dd>
+
+                        <dt class="col-sm-7">Personas incluidas</dt>
+                        <dd class="col-sm-5">@Model.PersonasIncluidas</dd>
+
+                        <dt class="col-sm-7">Personas adicionales</dt>
+                        <dd class="col-sm-5">@Model.PersonasAdicionales</dd>
+
+                        <dt class="col-sm-7">Valor noche</dt>
+                        <dd class="col-sm-5">$@Model.ValorNoche.ToString("N0")</dd>
+
+                        <dt class="col-sm-7">Valor adicional por persona</dt>
+                        <dd class="col-sm-5">$@Model.ValorPersonaAdicional.ToString("N0")</dd>
+
+                        <dt class="col-sm-7">Subtotal noches</dt>
+                        <dd class="col-sm-5">$@Model.SubtotalNoches.ToString("N0")</dd>
+
+                        <dt class="col-sm-7">Valor adicionales</dt>
+                        <dd class="col-sm-5">$@Model.ValorAdicionales.ToString("N0")</dd>
+
+                        <dt class="col-sm-7">Acompanantes</dt>
+                        <dd class="col-sm-5">$@Model.ValorAcompanantes.ToString("N0")</dd>
+
+                        <dt class="col-sm-7">Lavanderia</dt>
+                        <dd class="col-sm-5">$@Model.ValorLavanderia.ToString("N0")</dd>
+
+                        <dt class="col-sm-7">Servicios adicionales</dt>
+                        <dd class="col-sm-5">$@Model.TotalServicios.ToString("N0")</dd>
+
+                        <dt class="col-sm-7 fw-bold">Total reserva</dt>
+                        <dd class="col-sm-5 fw-bold">$@Model.TotalReserva.ToString("N0")</dd>
+                    </dl>
+
+                    <button type="submit" class="btn btn-primary w-100 mt-4">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

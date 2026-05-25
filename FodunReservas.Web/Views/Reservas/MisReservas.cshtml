@@ -1,0 +1,148 @@
+@model MisReservasViewModel
+@{
+    ViewData["Title"] = "Mis reservas";
+}
+
+<div class="py-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <div>
+            <h1 class="display-6 mb-1">Mis reservas</h1>
+            <p class="text-muted mb-0">Historial del usuario autenticado por numero de documento: @Model.DocumentoUsuario</p>
+        </div>
+        <a class="btn btn-primary" asp-action="Index">Nueva reserva</a>
+    </div>
+
+    @if (TempData["ReservaExitosa"] is string reservaExitosa)
+    {
+        <div class="alert alert-success">@reservaExitosa</div>
+    }
+
+    @if (TempData["ReservaActualizada"] is string reservaActualizada)
+    {
+        <div class="alert alert-success">@reservaActualizada</div>
+    }
+
+    @if (TempData["ReservaCancelada"] is string reservaCancelada)
+    {
+        <div class="alert alert-warning">@reservaCancelada</div>
+    }
+
+    @if (TempData["ReservaError"] is string reservaError)
+    {
+        <div class="alert alert-danger">@reservaError</div>
+    }
+
+    @if (!Model.Reservas.Any())
+    {
+        <div class="alert alert-info mb-0">
+            Aun no tienes reservas registradas.
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var reserva in Model.Reservas)
+            {
+                var badgeClass = reserva.Estado switch
+                {
+                    "Confirmada" => "bg-success",
+                    "Cancelada" => "bg-danger",
+                    "Completada" => "bg-primary",
+                    _ => "bg-warning text-dark"
+                };
+
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
+                                <div>
+                                    <h2 class="h4 mb-1">Reserva #@reserva.ReservaId</h2>
+                                    <div class="text-muted">@reserva.SedeNombre</div>
+                                </div>
+                                <span class="badge @badgeClass">@reserva.Estado</span>
+                            </div>
+
+                            <dl class="row mb-3">
+                                <dt class="col-md-3">Fecha de registro</dt>
+                                <dd class="col-md-3">@reserva.FechaReserva.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</dd>
+
+                                <dt class="col-md-3">Estadia</dt>
+                                <dd class="col-md-3">@reserva.FechaLlegada.ToString("yyyy-MM-dd") al @reserva.FechaSalida.ToString("yyyy-MM-dd")</dd>
+
+                                <dt class="col-md-3">Personas</dt>
+                                <dd class="col-md-3">@reserva.NroPersonas</dd>
+
+                                <dt class="col-md-3">Habitaciones</dt>
+                                <dd class="col-md-3">@reserva.NroHabitaciones</dd>
+
+                                <dt class="col-md-3">Acompanantes</dt>
+                                <dd class="col-md-3">@reserva.NroAcompanantes</dd>
+
+                                <dt class="col-md-3">Lavanderia</dt>
+                                <dd class="col-md-3">@(reserva.RequiereLavanderia ? "Si" : "No")</dd>
+
+                                <dt class="col-md-3">Total</dt>
+                                <dd class="col-md-3">$@reserva.ValorTotal.ToString("N0")</dd>
+                            </dl>
+
+                            @if (!string.IsNullOrWhiteSpace(reserva.Observaciones))
+                            {
+                                <p class="mb-3"><strong>Observaciones:</strong> @reserva.Observaciones</p>
+                            }
+
+                            @if (reserva.PuedeGestionarse)
+                            {
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    <a class="btn btn-outline-primary btn-sm"
+                                       asp-action="Editar"
+                                       asp-route-id="@reserva.ReservaId">
+                                        Editar
+                                    </a>
+                                    @if (reserva.PuedePagar)
+                                    {
+                                        <a class="btn btn-primary btn-sm"
+                                           asp-action="Pagar"
+                                           asp-route-id="@reserva.ReservaId">
+                                            Pagar
+                                        </a>
+                                    }
+                                    <form asp-action="Cancelar" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@reserva.ReservaId" />
+                                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                                            Cancelar reserva
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Alojamiento</th>
+                                            <th>Noches</th>
+                                            <th>Valor noche</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var detalle in reserva.Detalles)
+                                        {
+                                            <tr>
+                                                <td>@detalle.NumeroAlojamiento</td>
+                                                <td>@detalle.NroNoches</td>
+                                                <td>$@detalle.ValorNoche.ToString("N0")</td>
+                                                <td>$@detalle.SubTotal.ToString("N0")</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

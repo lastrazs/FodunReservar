@@ -1,0 +1,117 @@
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Registro";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <h1 class="h3 mb-3">Crear cuenta</h1>
+        <p class="text-muted">Este formulario ya guarda los campos de Identity extendido pedidos en la prueba.</p>
+
+        <form asp-action="Register" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="NroDocumento" class="form-label"></label>
+                <input asp-for="NroDocumento" class="form-control" />
+                <span asp-validation-for="NroDocumento" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="NombreCompleto" class="form-label"></label>
+                <input asp-for="NombreCompleto" class="form-control" />
+                <span asp-validation-for="NombreCompleto" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Celular" class="form-label"></label>
+                <input asp-for="Celular" class="form-control" />
+                <span asp-validation-for="Celular" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FechaNacimiento" class="form-label"></label>
+                    <input asp-for="FechaNacimiento" class="form-control" type="date" />
+                    <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Departamento" class="form-label"></label>
+                    <input asp-for="Departamento" class="form-control" />
+                    <span asp-validation-for="Departamento" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Municipio" class="form-label"></label>
+                <input asp-for="Municipio" class="form-control" />
+                <span asp-validation-for="Municipio" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Barrio" class="form-label"></label>
+                <input asp-for="Barrio" class="form-control" />
+                <span asp-validation-for="Barrio" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DireccionResidencia" class="form-label"></label>
+                <input asp-for="DireccionResidencia" class="form-control" />
+                <span asp-validation-for="DireccionResidencia" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="TelefonoResidencia" class="form-label"></label>
+                <input asp-for="TelefonoResidencia" class="form-control" />
+                <span asp-validation-for="TelefonoResidencia" class="text-danger"></span>
+            </div>
+
+            <div class="form-check mb-2">
+                <input asp-for="AutorizaCorreo" class="form-check-input" />
+                <label asp-for="AutorizaCorreo" class="form-check-label"></label>
+            </div>
+
+            <div class="form-check mb-3">
+                <input asp-for="AutorizaCelular" class="form-check-input" />
+                <label asp-for="AutorizaCelular" class="form-check-label"></label>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PreguntaSecreta" class="form-label"></label>
+                <input asp-for="PreguntaSecreta" class="form-control" />
+                <span asp-validation-for="PreguntaSecreta" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="RespuestaSecreta" class="form-label"></label>
+                <input asp-for="RespuestaSecreta" class="form-control" />
+                <span asp-validation-for="RespuestaSecreta" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ConfirmPassword" class="form-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Registrarme</button>
+            <a asp-action="Login" class="btn btn-link">Ya tengo cuenta</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

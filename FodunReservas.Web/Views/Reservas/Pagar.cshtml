@@ -1,0 +1,90 @@
+@model PagoSimuladoViewModel
+@{
+    ViewData["Title"] = "Pago simulado";
+}
+
+<div class="py-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <div>
+            <h1 class="display-6 mb-1">Pago simulado</h1>
+            <p class="text-muted mb-0">Este paso deja trazabilidad del pago y cambia la reserva a estado Confirmada sin usar una pasarela real.</p>
+        </div>
+        <a class="btn btn-outline-secondary" asp-action="MisReservas">Volver a mis reservas</a>
+    </div>
+
+    <form asp-action="Pagar" method="post" class="row g-4">
+        @Html.AntiForgeryToken()
+        <input asp-for="ReservaId" type="hidden" />
+
+        <div class="col-lg-7">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Resumen de la reserva</h2>
+
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Sede</dt>
+                        <dd class="col-sm-8">@Model.SedeNombre</dd>
+
+                        <dt class="col-sm-4">Alojamiento</dt>
+                        <dd class="col-sm-8">@Model.NumeroAlojamiento</dd>
+
+                        <dt class="col-sm-4">Fechas</dt>
+                        <dd class="col-sm-8">@Model.FechaLlegada.ToString("yyyy-MM-dd") al @Model.FechaSalida.ToString("yyyy-MM-dd")</dd>
+
+                        <dt class="col-sm-4">Personas</dt>
+                        <dd class="col-sm-8">@Model.NroPersonas</dd>
+
+                        <dt class="col-sm-4">Acompanantes</dt>
+                        <dd class="col-sm-8">@Model.NroAcompanantes</dd>
+
+                        <dt class="col-sm-4">Lavanderia</dt>
+                        <dd class="col-sm-8">@(Model.RequiereLavanderia ? "Incluida" : "No incluida")</dd>
+
+                        <dt class="col-sm-4 fw-bold">Total</dt>
+                        <dd class="col-sm-8 fw-bold">$@Model.TotalReserva.ToString("N0")</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="MetodoPago" class="form-label">Metodo de pago</label>
+                        <select asp-for="MetodoPago" class="form-select">
+                            <option value="PSE">PSE</option>
+                            <option value="Tarjeta">Tarjeta</option>
+                            <option value="Transferencia">Transferencia</option>
+                        </select>
+                        <span asp-validation-for="MetodoPago" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="TitularPago" class="form-label">Titular del pago</label>
+                        <input asp-for="TitularPago" class="form-control" />
+                        <span asp-validation-for="TitularPago" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DocumentoPagador" class="form-label">Documento del pagador</label>
+                        <input asp-for="DocumentoPagador" class="form-control" />
+                        <span asp-validation-for="DocumentoPagador" class="text-danger small"></span>
+                    </div>
+
+                    <div class="small text-muted mb-3">
+                        Para la prueba tecnica este paso simula la autorizacion y deja trazabilidad en la reserva.
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Aprobar pago simulado</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

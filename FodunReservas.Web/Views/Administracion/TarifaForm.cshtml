@@ -1,0 +1,59 @@
+@model TarifaFormViewModel
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Nueva tarifa" : "Editar tarifa";
+}
+
+<div class="py-4">
+    <h1 class="display-6 mb-4">@ViewData["Title"]</h1>
+
+    <form method="post" class="row g-3">
+        @Html.AntiForgeryToken()
+        <input asp-for="Id" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="col-md-6">
+            <label asp-for="SedeId" class="form-label">Sede</label>
+            <select asp-for="SedeId" asp-items="Model.Sedes" class="form-select">
+                <option value="">Selecciona una sede</option>
+            </select>
+            <span asp-validation-for="SedeId" class="text-danger small"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="TemporadaId" class="form-label">Temporada</label>
+            <select asp-for="TemporadaId" asp-items="Model.Temporadas" class="form-select">
+                <option value="">Selecciona una temporada</option>
+            </select>
+            <span asp-validation-for="TemporadaId" class="text-danger small"></span>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="NumeroHabitaciones" class="form-label"></label>
+            <input asp-for="NumeroHabitaciones" class="form-control" type="number" min="1" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="PersonasBase" class="form-label"></label>
+            <input asp-for="PersonasBase" class="form-control" type="number" min="1" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="ValorNoche" class="form-label"></label>
+            <input asp-for="ValorNoche" class="form-control" type="number" step="0.01" min="0" />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="ValorPersonaAdicional" class="form-label"></label>
+            <input asp-for="ValorPersonaAdicional" class="form-control" type="number" step="0.01" min="0" />
+        </div>
+        <div class="col-12">
+            <div class="form-check">
+                <input asp-for="Activa" class="form-check-input" />
+                <label asp-for="Activa" class="form-check-label"></label>
+            </div>
+        </div>
+        <div class="col-12 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a class="btn btn-outline-secondary" asp-action="Tarifas">Volver</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

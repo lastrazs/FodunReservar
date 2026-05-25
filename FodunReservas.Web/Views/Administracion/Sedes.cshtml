@@ -1,0 +1,56 @@
+@model SedesAdminListViewModel
+@{
+    ViewData["Title"] = "Sedes";
+}
+
+<div class="py-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <div>
+            <h1 class="display-6 mb-1">Sedes</h1>
+            <p class="text-muted mb-0">CRUD administrativo basico sobre sedes y apartamentos.</p>
+        </div>
+        <a class="btn btn-primary" asp-action="CrearSede">Nueva sede</a>
+    </div>
+
+    @if (TempData["AdminSuccess"] is string adminSuccess)
+    {
+        <div class="alert alert-success">@adminSuccess</div>
+    }
+
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Ubicacion</th>
+                    <th>Acompanantes</th>
+                    <th>Lavanderia</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var sede in Model.Sedes)
+            {
+                <tr>
+                    <td>@sede.Nombre</td>
+                    <td>@sede.TipoSede</td>
+                    <td>@sede.Ubicacion</td>
+                    <td>@(sede.PermiteAcompanantes ? "Si" : "No")</td>
+                    <td>@(sede.TieneServicioLavanderia ? "Si" : "No")</td>
+                    <td>@(sede.Activa ? "Activa" : "Inactiva")</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-primary" asp-action="EditarSede" asp-route-id="@sede.Id">Editar</a>
+                        <form asp-action="CambiarEstadoSede" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@sede.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">Activar / Desactivar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

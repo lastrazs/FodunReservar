@@ -1,0 +1,51 @@
+@model AdministracionDashboardViewModel
+@{
+    ViewData["Title"] = "Administracion";
+}
+
+<div class="py-4">
+    <div class="mb-4">
+        <h1 class="display-6 mb-1">Administracion</h1>
+        <p class="text-muted mb-0">Gestion basica de catalogos maestros para la prueba tecnica.</p>
+    </div>
+
+    @if (TempData["AdminSuccess"] is string adminSuccess)
+    {
+        <div class="alert alert-success">@adminSuccess</div>
+    }
+
+    <div class="row g-4">
+        <div class="col-md-6 col-xl-3">
+            <a class="card shadow-sm text-decoration-none text-dark h-100" asp-action="Sedes">
+                <div class="card-body">
+                    <div class="small text-muted">Sedes</div>
+                    <div class="display-6">@Model.TotalSedes</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <a class="card shadow-sm text-decoration-none text-dark h-100" asp-action="Alojamientos">
+                <div class="card-body">
+                    <div class="small text-muted">Alojamientos</div>
+                    <div class="display-6">@Model.TotalAlojamientos</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <a class="card shadow-sm text-decoration-none text-dark h-100" asp-action="Temporadas">
+                <div class="card-body">
+                    <div class="small text-muted">Temporadas</div>
+                    <div class="display-6">@Model.TotalTemporadas</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <a class="card shadow-sm text-decoration-none text-dark h-100" asp-action="Tarifas">
+                <div class="card-body">
+                    <div class="small text-muted">Tarifas</div>
+                    <div class="display-6">@Model.TotalTarifas</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
