@@ -108,7 +108,13 @@ SELECT NAME FROM sys.procedures WHERE NAME LIKE 'sp_%';
 
 ### Paso 3: Configurar Cadena de Conexión
 
-**Editar** `FodunReservas.Web/appsettings.json`:
+`appsettings.json` y `appsettings.Development.json` son archivos locales y **no deben versionarse**.
+
+1. Copia `FodunReservas.Web/appsettings.example.json` a `FodunReservas.Web/appsettings.json`
+2. Copia `FodunReservas.Web/appsettings.Development.example.json` a `FodunReservas.Web/appsettings.Development.json`
+3. Edita solo tus copias locales
+
+Ejemplo para `FodunReservas.Web/appsettings.json`:
 
 ```json
 {
@@ -134,7 +140,11 @@ SELECT NAME FROM sys.procedures WHERE NAME LIKE 'sp_%';
 
 ### Paso 4: Configurar SMTP (Correos)
 
-**Editar** `FodunReservas.Web/appsettings.json` para envío de correos real:
+Por defecto, el proyecto usa `PickupDirectory` en desarrollo y guarda correos localmente.
+
+Configura SMTP real solo en tu archivo local `FodunReservas.Web/appsettings.json`.
+
+Edita tu archivo local `FodunReservas.Web/appsettings.json` para envío de correos real:
 
 ```json
 {
@@ -142,7 +152,7 @@ SELECT NAME FROM sys.procedures WHERE NAME LIKE 'sp_%';
     "Host": "smtp.gmail.com",
     "Port": 587,
     "UserName": "tu-email@gmail.com",
-    "Password": "tu-contraseña-app",
+    "Password": "tu-credencial-de-aplicacion",
     "FromEmail": "tu-email@gmail.com",
     "UsePickupDirectory": false
   }
@@ -151,13 +161,13 @@ SELECT NAME FROM sys.procedures WHERE NAME LIKE 'sp_%';
 
 **Para desarrollo sin enviar correos reales** (default):
 
-Editar `FodunReservas.Web/appsettings.Development.json`:
+Usa `FodunReservas.Web/appsettings.Development.json`:
 
 ```json
 {
   "Smtp": {
     "UsePickupDirectory": true,
-    "PickupDirectoryPath": "App_Data/Emails"
+    "PickupDirectory": "App_Data/Emails"
   }
 }
 ```
@@ -286,7 +296,7 @@ Accedible desde el menú si tienes rol de administrador (actualmente libre, desc
 
 ### "La cadena de conexión 'FodunReservasConnection' no está configurada"
 
-**Solución:** Verifica que `appsettings.json` tenga la cadena correcta y que SQL Server esté accesible.
+**Solución:** Verifica que tu `appsettings.json` local tenga la cadena correcta y que SQL Server esté accesible.
 
 ```powershell
 # Probar conexión a SQL Server
@@ -306,12 +316,12 @@ GO
 ### "No se envía el correo de recuperación"
 
 **Solución (Desarrollo):** 
-- Verifica que `UsePickupDirectory` sea `true` en `appsettings.Development.json`
+- Verifica que `UsePickupDirectory` sea `true` en tu `appsettings.Development.json` local
 - Revisa carpeta: `FodunReservas.Web/App_Data/Emails/`
 - Busca el archivo `.eml` más reciente
 
 **Solución (Producción):**
-- Configura credenciales SMTP reales en `appsettings.json`
+- Configura credenciales SMTP reales solo en tu `appsettings.json` local
 - Usa credenciales de aplicación de Gmail, Outlook, etc.
 - Verifica firewall permita puerto 587 o 465
 
